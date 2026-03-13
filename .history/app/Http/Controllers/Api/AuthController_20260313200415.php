@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\ApiBaseApiController;
+use App\Http\Requests\Api\LoginRequest;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class AuthController extends ApiBaseApiController
+{
+    public function login(LoginRequest $request)
+    {
+        // Attempt login
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json([
+                'message' => 'Invalid credentials'
+            ], 401);
+        }
+
+        // Get authenticated user
+        $user = User::select('id', 'name', 'type', 'status')->where('email', $request->email)->first();
+
+        // Create token
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => $user,
+            'token' => $token
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Logged out successfully'
+        ]);
+    }
+}

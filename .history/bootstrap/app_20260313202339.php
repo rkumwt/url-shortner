@@ -21,7 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($request->is('api/*')) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Unauthenticated'
+                    'message' => 'Unauthenticated',
+                    'data' => []
                 ], 401);
             }
         });

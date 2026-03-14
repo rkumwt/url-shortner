@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import { useAuthStore } from "@/stores/auth";
 import superadminRoute from "@/router/superadmin";
+import adminRoute from "@/router/admin";
 
 const routes = [
     {
@@ -19,6 +20,7 @@ const routes = [
             requireAuth: true,
         }
     },
+    ...adminRoute,
     ...superadminRoute,
 ]
 
@@ -31,9 +33,19 @@ router.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
 
     if (to.meta && to.meta.requireAuth && !authStore.isLoggedIn) {
-        next({ name: 'login' });
+        return next({ name: 'login' });
     } else if (to.name === 'login' && authStore.isLoggedIn) {
-        next({ name: 'dashboard' });
+        const redirectUrl =
+            authStore.user?.type === "superadmin" ? "superadmin.dashboard" : "admin.dashboard";
+        return next({ name: redirectUrl });
+    } else if (to.meta?.allowedUserType && authStore.user) {
+        const allowedTypes = to.meta.allowedUserType;
+
+        if (!allowedTypes.includes(authStore.user.type)) {
+            const redirectUrl =
+                authStore.user.type === "superadmin" ? "superadmin.dashboard" : "admin.dashboard";
+            return next({ name: redirectUrl });
+        }
     }
 
     next();

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Superadmin\ClientsController;
+use App\Http\Controllers\Api\Superadmin\ShortUrlsController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -16,5 +17,5 @@ Route::prefix('superadmin')->middleware('auth:sanctum')->group(function () {
     Route::post('/clients', [ClientsController::class, 'index']);
 
     // Short Urls
-    Route::post('/clients', [ClientsController::class, 'index']);
+    Route::post('/urls', [ShortUrlsController::class, 'index']);
 });

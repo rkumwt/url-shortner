@@ -15,15 +15,13 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('email');
+            $table->integer('total_users')->default(1);
+            $table->integer('total_urls')->default(0);
+            $table->integer('total_url_hits')->default(0);
             $table->boolean('is_global')->default(0);
             $table->timestamps();
         });
-
-        // Creating superadmin company
-        $superadminCompany = new Company();
-        $superadminCompany->name = 'Sembark';
-        $superadminCompany->is_global = 1;
-        $superadminCompany->save();
     }
 
     /**

@@ -12,6 +12,7 @@
                     <a-input
                         v-model:value="formData.email"
                         placeholder="Please Enter Your Email"
+                        @pressEnter="onSubmit"
                     />
                 </a-form-item>
 
@@ -25,6 +26,7 @@
                     <a-input-password
                         v-model:value="formData.password"
                         placeholder="Please Enter Your Password"
+                        @pressEnter="onSubmit"
                     />
                 </a-form-item>
 
@@ -59,8 +61,13 @@ const onSubmit = () => {
         url: "login",
         data: formData.value,
         success: (res) => {
+            const user = res.data.user;
             authStore.updateAuthToken(res.data.token);
-            router.push({ name: "superadmin.dashboard" });
+            authStore.updateUser(user);
+
+            const redirectUrl =
+                user.type === "superadmin" ? "superadmin.dashboard" : "admin.dashboard";
+            router.push({ name: redirectUrl });
         },
     });
 };

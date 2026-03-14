@@ -1,13 +1,14 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { AUTH_USER, AUTH_TOKEN } from "@/utils/localStorageKeys";
+import { router } from "@/router";
 
 const getValueFromLocalStorage = (key) => {
     return window.localStorage.getItem(key) || null;
 }
 
 export const useAuthStore = defineStore('auth', () => {
-    const user = ref(getValueFromLocalStorage(AUTH_USER));
+    const user = ref(null);
     const authToken = ref(getValueFromLocalStorage(AUTH_TOKEN));
 
     const isLoggedIn = computed(() => {
@@ -16,7 +17,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     const updateUser = (newVal) => {
         user.value = newVal;
-        window.localStorage.setItem(AUTH_USER, newVal);
     }
 
     const updateAuthToken = (newVal) => {
@@ -24,12 +24,27 @@ export const useAuthStore = defineStore('auth', () => {
         window.localStorage.setItem(AUTH_TOKEN, newVal);
     }
 
-    const updateUserAction = () => {
-        if (authToken) {
+    const updateUserAction = async () => {
+        if (authToken.value) {
             const axiosAdmin = window.axiosAdmin;
 
-            axiosAdmin.post('/user').then(function (response) {
-                // updateUser(response.data.user);
+            const response = await axiosAdmin.post('/user')
+            console.log(response.data.user);
+            updateUser(response.data.user)
+        }
+    }
+
+    const logoutAction = () => {
+        if (authToken.value) {
+            const axiosAdmin = window.axiosAdmin;
+
+            axiosAdmin.post('/logout').then(function (response) {
+                window.localStorage.clear();
+
+                updateAuthToken(null);
+                updateUser(null);
+
+                router.push({ name: "login" });
             }).catch(function (error) { });
         }
     }
@@ -43,5 +58,6 @@ export const useAuthStore = defineStore('auth', () => {
         updateAuthToken,
 
         updateUserAction,
+        logoutAction
     }
 })

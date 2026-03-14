@@ -6,11 +6,18 @@ import { router } from '@/router'
 import { createPinia } from "pinia";
 import { useAuthStore } from '@/stores/auth';
 
-const app = createApp(App);
-app.use(router);
-app.use(createPinia())
+const bootstarp = async () => {
+    const app = createApp(App);
+    const pinia = createPinia();
 
-const authStore = useAuthStore();
-authStore.updateUserAction();
+    app.use(pinia);
 
-app.mount('#app')
+    // Load user data before setting up router
+    const authStore = useAuthStore();
+    await authStore.updateUserAction();
+
+    app.use(router);
+    app.mount('#app')
+}
+
+bootstarp();

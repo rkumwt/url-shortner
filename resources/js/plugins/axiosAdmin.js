@@ -9,10 +9,14 @@ var axiosAdmin = axios.create({
 axiosAdmin.defaults.headers['Accept'] = 'application/json';
 axiosAdmin.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-const localAuthToken = window.localStorage.getItem(AUTH_TOKEN);
-if (localAuthToken) {
-    axiosAdmin.defaults.headers.common['Authorization'] = `Bearer ${localAuthToken}`;
-}
+axiosAdmin.interceptors.request.use((config) => {
+    const authToken = window.localStorage.getItem(AUTH_TOKEN);
+    if (authToken) {
+        config.headers['Authorization'] = `Bearer ${authToken}`;
+    }
+
+    return config;
+});
 
 // Axios error listener
 axiosAdmin.interceptors.response.use(function (response) {
@@ -20,6 +24,8 @@ axiosAdmin.interceptors.response.use(function (response) {
 }, function (error) {
     const errorCode = error.response.status;
     if (errorCode === 401) {
+        window.localStorage.clear();
+
         // If error 401 redirect to login
         window.location.href = window.config.base_url;
     } else {

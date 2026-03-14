@@ -29,18 +29,6 @@ return new class extends Migration
             $table->enum('status', ['pending', 'enabled'])->default('pending');
             $table->timestamps();
         });
-
-        $globalCompany = Company::where('is_global', 1)->first();
-
-        // Creating superadmin user
-        $superadminUser = new User();
-        $superadminUser->company_id = $globalCompany->id;
-        $superadminUser->name = 'Sembark';
-        $superadminUser->email = 'superadmin@example.com';
-        $superadminUser->password = Hash::make(123456);
-        $superadminUser->type = 'superadmin';
-        $superadminUser->status = 'enabled';
-        $superadminUser->save();
     }
 
     /**

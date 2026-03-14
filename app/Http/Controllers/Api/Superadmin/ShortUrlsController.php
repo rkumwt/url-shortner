@@ -13,19 +13,22 @@ class ShortUrlsController extends ApiBaseController
         $perPage = $request->per_page ?? 10;
         $companyId = $request->company_id ?? null;
 
-        $users = ShortUrl::select('id', 'name');
+        $urls = ShortUrl::select('short_urls.id', 'short_urls.url', 'short_urls.short_url_code', 'short_urls.hits', 'companies.name as client', 'short_urls.created_at')
+            ->join('users', 'users.id', '=', 'short_urls.created_by')
+            ->join('companies', 'companies.id', '=', 'users.company_id');
+
         if ($companyId) {
-            $users->where('company_id', $companyId);
+            $urls->where('short_urls.company_id', $companyId);
         }
-        $users->paginate($perPage);
+        $urls = $urls->paginate($perPage);
 
         return $this->success('Short Urls fetched successfully', [
-            'urls'   => $users->items(),
+            'data'   => $urls->items(),
             'meta'      => [
-                'current_page' => $users->currentPage(),
-                'last_page' => $users->lastPage(),
-                'per_page' => $users->perPage(),
-                'total' => $users->total()
+                'current_page' => $urls->currentPage(),
+                'last_page' => $urls->lastPage(),
+                'per_page' => $urls->perPage(),
+                'total' => $urls->total()
             ]
         ]);
     }

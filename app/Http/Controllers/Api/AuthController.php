@@ -31,6 +31,15 @@ class AuthController extends ApiBaseController
         return $this->success('Login successful', $data);
     }
 
+    public function user(Request $request)
+    {
+        $data = [
+            'user' => $request->user()
+        ];
+
+        return $this->success('User Fetched successfully', $data);
+    }
+
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();

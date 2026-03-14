@@ -4,7 +4,7 @@
             <a-row>
                 <a-col :span="12"></a-col>
                 <a-col :span="12">
-                    <a-button type="link">Logout</a-button>
+                    <a-button type="link" @click="logout">Logout</a-button>
                 </a-col>
             </a-row>
         </a-layout-header>
@@ -15,7 +15,7 @@
                 <a-breadcrumb-item>App</a-breadcrumb-item>
             </a-breadcrumb>
             <div :style="{ background: '#fff', padding: '24px', minHeight: '280px' }">
-                Content
+                <router-view />
             </div>
         </a-layout-content>
         <a-layout-footer style="text-align: center">
@@ -27,6 +27,8 @@
 <script setup>
 import { ref } from "vue";
 const selectedKeys = ref(["2"]);
+
+const logout = () => {};
 </script>
 
 <style scoped>

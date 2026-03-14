@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import { useAuthStore } from "@/stores/auth";
-
+import superadminRoute from "@/router/superadmin";
 
 const routes = [
     {
@@ -19,6 +19,7 @@ const routes = [
             requireAuth: true,
         }
     },
+    ...superadminRoute,
 ]
 
 export const router = createRouter({
@@ -34,8 +35,6 @@ router.beforeEach((to, from, next) => {
     } else if (to.name === 'login' && authStore.isLoggedIn) {
         next({ name: 'dashboard' });
     }
-
-    console.log(to);
 
     next();
 });

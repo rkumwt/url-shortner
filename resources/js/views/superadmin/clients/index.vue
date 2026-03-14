@@ -14,7 +14,21 @@
     >
         <template #bodyCell="{ column, record }">
             <template v-if="column.dataIndex === 'name'">
-                {{ record.name }} <br />
+                <a-button
+                    type="link"
+                    @click="
+                        () => {
+                            $router.push({
+                                name: 'superadmin.urls.client',
+                                params: { client_id: record.id },
+                            });
+                        }
+                    "
+                    style="padding: 0"
+                >
+                    {{ record.name }}
+                </a-button>
+                <br />
                 {{ record.email }}
             </template>
         </template>

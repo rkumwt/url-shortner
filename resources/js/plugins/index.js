@@ -1,2 +1,3 @@
-import "./axiosBase"
-import "./axiosAdmin"
+import "./axiosBase";
+import "./axiosAdmin";
+import "./axiosFile";

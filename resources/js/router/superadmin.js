@@ -12,6 +12,15 @@ const routes = [{
             }
         },
         {
+            path: "/superadmin/urls/:client_id",
+            name: "superadmin.urls.client",
+            component: () => import("@/views/superadmin/urls/index.vue"),
+            meta: {
+                requireAuth: true,
+                allowedUserType: ['superadmin']
+            }
+        },
+        {
             path: "/superadmin/urls",
             name: "superadmin.urls",
             component: () => import("@/views/superadmin/urls/index.vue"),

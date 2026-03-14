@@ -16,6 +16,7 @@ class ClientsController extends ApiBaseController
         $perPage = $request->per_page ?? 10;
 
         $users = Company::select('id', 'name', 'email', 'total_users', 'total_urls', 'total_url_hits')
+            ->where('is_global', 0)
             ->paginate($perPage);
 
         return $this->success('Clients fetched successfully', [

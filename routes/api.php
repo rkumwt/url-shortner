@@ -17,5 +17,6 @@ Route::prefix('superadmin')->middleware('auth:sanctum')->group(function () {
     Route::post('/clients', [ClientsController::class, 'index']);
 
     // Short Urls
+    Route::post('/urls/download', [ShortUrlsController::class, 'download']);
     Route::post('/urls', [ShortUrlsController::class, 'index']);
 });

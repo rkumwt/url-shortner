@@ -1,7 +1,7 @@
 <template>
     <a-page-header style="padding: 25px 0px" title="Clients">
         <template #extra>
-            <a-button type="primary">Invite</a-button>
+            <Invite />
         </template>
     </a-page-header>
 
@@ -39,6 +39,7 @@
 import { ref, onMounted } from "vue";
 import fields from "@/views/superadmin/clients/fields";
 import datatable from "@/composable/datatable";
+import Invite from "./Invite.vue";
 
 const { columns } = fields();
 const { url, data, tablePagination, fetchData, handleTableChange } = datatable();

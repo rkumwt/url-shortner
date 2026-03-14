@@ -14,6 +14,7 @@ const apiAdmin = () => {
             .post(url, data)
             .then((res) => {
                 loading.value = false;
+                rules.value = {};
 
                 success(res);
             })

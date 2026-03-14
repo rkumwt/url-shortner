@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiBaseController;
 use App\Http\Requests\Api\Admin\TeamMembers\TeamMembersIndexRequest;
 use App\Http\Requests\Api\Admin\TeamMembers\TeamMembersInviteRequest;
 use App\Mail\InviteMailClient;
+use App\Mail\InviteMailTeamMember;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
@@ -35,8 +36,10 @@ class TeamMembersController extends ApiBaseController
     {
         $name = $request->name;
         $email = $request->email;
+        $company = $request->user()->company;
+        $companyName = $company->name ?? '';
 
-        Mail::to($email)->send(new InviteMailClient($name, 'https://google.com'));
+        Mail::to($email)->send(new InviteMailTeamMember($name, $companyName, 'https://google.com'));
 
         return $this->success('Invitation send successfully');
     }

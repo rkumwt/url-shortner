@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Exports\ShortUrlExport;
 use App\Http\Controllers\ApiBaseController;
 use App\Http\Requests\Api\Admin\ShortUrls\ShortUrlsDownloadRequest;
+use App\Http\Requests\Api\Admin\ShortUrls\ShortUrlsGenerateRequest;
 use App\Http\Requests\Api\Admin\ShortUrls\ShortUrlsIndexRequest;
+use App\Models\Company;
 use App\Models\ShortUrl;
+use App\Models\User;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ShortUrlsController extends ApiBaseController
@@ -66,5 +70,25 @@ class ShortUrlsController extends ApiBaseController
         $urls = $urls->orderBy('created_at', 'desc')->get();
 
         return Excel::download(new ShortUrlExport($urls), 'urls.csv');
+    }
+
+    public function generate(ShortUrlsGenerateRequest $request)
+    {
+        $user = $request->user();
+
+        $shortUrl = new ShortUrl();
+        $shortUrl->company_id = $user->company_id;
+        $shortUrl->url = $request->url;
+        $shortUrl->short_url_code = Str::random(6);
+        $shortUrl->created_by = $user->id;
+        $shortUrl->save();
+
+        $userTotalUrls = ShortUrl::where('created_by', $user->id)->count();
+        $companyTotalUrls = ShortUrl::where('company_id', $user->company_id)->count();
+
+        Company::where('id', $user->company_id)->update(['total_urls' => $companyTotalUrls]);
+        User::where('id', $user->id)->update(['total_urls' => $userTotalUrls]);
+
+        return $this->success('Short URL generated successfully');
     }
 }

@@ -1,5 +1,8 @@
 <template>
     <a-page-header style="padding: 25px 0px" title="Short URLs">
+        <template #subTitle>
+            <GenerateUrl @success="loadData" />
+        </template>
         <template #extra>
             <a-range-picker :presets="rangePresets" @change="onRangeChange" />
             <a-button type="primary" @click="download" :loading="downloading">
@@ -45,6 +48,7 @@ import dayjs from "dayjs";
 import { useRoute } from "vue-router";
 import fields from "./fields";
 import datatable from "@/composable/datatable";
+import GenerateUrl from "./GenerateUrl.vue";
 
 const route = useRoute();
 const downloading = ref(false);

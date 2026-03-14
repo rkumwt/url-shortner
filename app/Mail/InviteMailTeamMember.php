@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class InviteMailClient extends Mailable
+class InviteMailTeamMember extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -34,7 +34,7 @@ class InviteMailClient extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invitation mail from ' . $this->company,
+            subject: 'Invitation from ' . $this->company,
         );
     }
 
@@ -44,7 +44,7 @@ class InviteMailClient extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.invite_client',
+            view: 'emails.invite_team_member',
         );
     }
 

@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->string('url');
             $table->string('short_url_code');
-            $table->integer('hits');
+            $table->integer('hits')->default(0);
             $table->foreignId('created_by')
                 ->constrained('users')
                 ->cascadeOnDelete();

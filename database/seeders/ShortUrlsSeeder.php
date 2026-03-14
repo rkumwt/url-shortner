@@ -63,5 +63,33 @@ class ShortUrlsSeeder extends Seeder
                     ]);
             }
         }
+
+        // Update company totals
+        $companies = Company::where('is_global', 0)->get();
+
+        foreach ($companies as $company) {
+            $totalUrls = ShortUrl::where('company_id', $company->id)->count();
+            $totalUrlHits = ShortUrl::where('company_id', $company->id)->sum('hits');
+            $totalUsers = User::where('company_id', $company->id)->count();
+
+            $company->update([
+                'total_urls' => $totalUrls,
+                'total_url_hits' => $totalUrlHits,
+                'total_users' => $totalUsers,
+            ]);
+        }
+
+        // Update user totals
+        $allUsers = User::all();
+
+        foreach ($allUsers as $user) {
+            $totalUrls = ShortUrl::where('created_by', $user->id)->count();
+            $totalUrlHits = ShortUrl::where('created_by', $user->id)->sum('hits');
+
+            $user->update([
+                'total_urls' => $totalUrls,
+                'total_url_hits' => $totalUrlHits,
+            ]);
+        }
     }
 }

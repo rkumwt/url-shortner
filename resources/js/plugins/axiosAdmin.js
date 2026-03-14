@@ -30,8 +30,8 @@ axiosAdmin.interceptors.response.use(function (response) {
         // If error 401 redirect to login
         window.location.href = window.config.base_url;
     } else if (errorCode === 403) {
-        message.error(error);
-        return;
+        message.error(error.response.data.message || 'Forbidden');
+        return Promise.reject(error.response);
     } else {
         return Promise.reject(error.response);
     }

@@ -34,8 +34,10 @@ class ClientsController extends ApiBaseController
     {
         $name = $request->name;
         $email = $request->email;
+        $globalCompany = Company::select('name')->where('is_global', 1)->first();
+        $globalCompanyName = $globalCompany ? $globalCompany->name : '';
 
-        Mail::to($email)->send(new InviteMailClient($name, 'https://google.com'));
+        Mail::to($email)->send(new InviteMailClient($name, $globalCompanyName, 'https://google.com'));
 
         return $this->success('Invitation send successfully');
     }

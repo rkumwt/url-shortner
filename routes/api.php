@@ -28,6 +28,7 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
     Route::post('/team-members', [TeamMembersController::class, 'index']);
 
     // Short Urls
+    Route::post('/urls/generate', [AdminShortUrlsController::class, 'generate']);
     Route::post('/urls/download', [AdminShortUrlsController::class, 'download']);
     Route::post('/urls', [AdminShortUrlsController::class, 'index']);
 });

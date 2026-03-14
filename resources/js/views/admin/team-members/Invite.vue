@@ -99,6 +99,7 @@ const onSubmit = () => {
             formData.value = {
                 name: "",
                 email: "",
+                role: "member",
             };
 
             message.success("Invitation send successfully.");

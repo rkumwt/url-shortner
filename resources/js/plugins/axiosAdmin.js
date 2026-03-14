@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { AUTH_TOKEN } from '@/utils/localstorageKeys';
+import { message } from "ant-design-vue";
 
 var axiosAdmin = axios.create({
     baseURL: window.config.base_url + '/api'
@@ -28,6 +29,9 @@ axiosAdmin.interceptors.response.use(function (response) {
 
         // If error 401 redirect to login
         window.location.href = window.config.base_url;
+    } else if (errorCode === 403) {
+        message.error(error);
+        return;
     } else {
         return Promise.reject(error.response);
     }

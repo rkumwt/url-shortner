@@ -2,7 +2,7 @@
     <a-button type="primary" @click="showModal">Invite</a-button>
     <a-modal
         v-model:open="open"
-        title="Invite New Client"
+        title="Invite Team Member"
         :footer="null"
         :bodyStyle="{ marginTop: '40px' }"
     >
@@ -37,6 +37,22 @@
                         />
                     </a-form-item>
 
+                    <a-form-item
+                        label="Role"
+                        name="role"
+                        :help="rules.role ? rules.role[0] : null"
+                        :validateStatus="rules.role ? 'error' : null"
+                        class="required"
+                    >
+                        <a-select
+                            v-model:value="formData.role"
+                            placeholder="Enter Client Role"
+                        >
+                            <a-select-option value="admin">Admin</a-select-option>
+                            <a-select-option value="member">Member</a-select-option>
+                        </a-select>
+                    </a-form-item>
+
                     <a-form-item>
                         <a-button
                             @click="onSubmit"
@@ -63,6 +79,7 @@ const { loading, rules, apiRequest } = apiAdmin();
 const formData = ref({
     name: "",
     email: "",
+    role: "member",
 });
 const open = ref(false);
 
@@ -75,7 +92,7 @@ const onSubmit = () => {
     loading.value = true;
 
     apiRequest({
-        url: "superadmin/clients/invite",
+        url: "admin/team-members/invite",
         data: formData.value,
         success: (res) => {
             open.value = false;

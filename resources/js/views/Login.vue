@@ -1,43 +1,53 @@
 <template>
-    <a-row>
-        <a-col :span="6" :offset="9">
-            <a-form layout="vertical">
-                <a-form-item
-                    label="Email"
-                    name="email"
-                    :help="rules.email ? rules.email[0] : null"
-                    :validateStatus="rules.email ? 'error' : null"
-                    class="required"
-                >
-                    <a-input
-                        v-model:value="formData.email"
-                        placeholder="Please Enter Your Email"
-                        @pressEnter="onSubmit"
-                    />
-                </a-form-item>
+    <div class="login-container">
+        <a-row justify="center" align="middle" style="height: 100%; width: 50%">
+            <a-col :xs="22" :sm="20" :md="16" :lg="12" :xl="10">
+                <a-card>
+                    <h2 style="text-align: center; margin-bottom: 24px">Login</h2>
+                    <a-form layout="vertical">
+                        <a-form-item
+                            label="Email"
+                            name="email"
+                            :help="rules.email ? rules.email[0] : null"
+                            :validateStatus="rules.email ? 'error' : null"
+                            class="required"
+                        >
+                            <a-input
+                                v-model:value="formData.email"
+                                placeholder="Please Enter Your Email"
+                                @pressEnter="onSubmit"
+                            />
+                        </a-form-item>
 
-                <a-form-item
-                    label="Password"
-                    name="password"
-                    :help="rules.password ? rules.password[0] : null"
-                    :validateStatus="rules.password ? 'error' : null"
-                    class="required"
-                >
-                    <a-input-password
-                        v-model:value="formData.password"
-                        placeholder="Please Enter Your Password"
-                        @pressEnter="onSubmit"
-                    />
-                </a-form-item>
+                        <a-form-item
+                            label="Password"
+                            name="password"
+                            :help="rules.password ? rules.password[0] : null"
+                            :validateStatus="rules.password ? 'error' : null"
+                            class="required"
+                        >
+                            <a-input-password
+                                v-model:value="formData.password"
+                                placeholder="Please Enter Your Password"
+                                @pressEnter="onSubmit"
+                            />
+                        </a-form-item>
 
-                <a-form-item>
-                    <a-button @click="onSubmit" :loading="loading" type="primary" block>
-                        Submit
-                    </a-button>
-                </a-form-item>
-            </a-form>
-        </a-col>
-    </a-row>
+                        <a-form-item>
+                            <a-button
+                                @click="onSubmit"
+                                :loading="loading"
+                                type="primary"
+                                block
+                            >
+                                Submit
+                            </a-button>
+                        </a-form-item>
+                    </a-form>
+                </a-card>
+            </a-col>
+        </a-row>
+    </div>
 </template>
 <script setup>
 import { ref } from "vue";
@@ -72,3 +82,12 @@ const onSubmit = () => {
     });
 };
 </script>
+
+<style scoped>
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>

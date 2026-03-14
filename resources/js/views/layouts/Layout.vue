@@ -3,9 +3,21 @@
         <a-layout-header :style="{ background: '#fff', padding: 50 }">
             <a-row>
                 <a-col :span="12">
-                    <a-typography-title :level="4">
-                        {{ authStore.user?.name }}
-                    </a-typography-title>
+                    <a-row>
+                        <a-col :span="6">
+                            <span style="font-weight: bolder">
+                                {{ authStore.user?.company?.name }}
+                            </span>
+                        </a-col>
+                        <a-col :span="18">
+                            <SuperadminMenus
+                                v-if="authStore.user?.type === 'superadmin'"
+                            />
+                            <AdminMenus
+                                v-if="['admin', 'member'].includes(authStore.user?.type)"
+                            />
+                        </a-col>
+                    </a-row>
                 </a-col>
                 <a-col :span="12" :style="{ textAlign: 'right' }">
                     <Logout />
@@ -20,8 +32,10 @@
 
 <script setup>
 import { ref } from "vue";
-import Logout from "@/views/components/Logout.vue";
 import { useAuthStore } from "@/stores/auth";
+import Logout from "@/views/components/Logout.vue";
+import AdminMenus from "./AdminMenus.vue";
+import SuperadminMenus from "./SuperadminMenus.vue";
 
 const authStore = useAuthStore();
 </script>

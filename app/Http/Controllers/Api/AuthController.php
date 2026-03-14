@@ -18,7 +18,9 @@ class AuthController extends ApiBaseController
         }
 
         // Get authenticated user
-        $user = User::select('id', 'name', 'type', 'status')->where('email', $request->email)->first();
+        $user = User::select('id', 'name', 'type', 'status', 'company_id')
+            ->with('company:id,name')
+            ->where('email', $request->email)->first();
 
         // Create token
         $token = $user->createToken('api-token')->plainTextToken;
@@ -33,8 +35,13 @@ class AuthController extends ApiBaseController
 
     public function user(Request $request)
     {
+        $user = User::select('id', 'name', 'type', 'status', 'company_id')
+            ->with('company:id,name')
+            ->where('id', $request->user()->id)
+            ->first();
+
         $data = [
-            'user' => $request->user()
+            'user' => $user
         ];
 
         return $this->success('User Fetched successfully', $data);

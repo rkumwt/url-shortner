@@ -24,15 +24,6 @@ class ClientSeeder extends Seeder
         $demoCompany = Company::where('is_global', 0)->first();
         $globalCompany = Company::where('is_global', 1)->first();
 
-        // Admin for Demo Company
-        $admin = new User();
-        $admin->company_id = $demoCompany->id;
-        $admin->name = 'Admin';
-        $admin->email = 'admin@example.com';
-        $admin->password = Hash::make(12345678);
-        $admin->status = 'enabled';
-        $admin->save();
-
         // Creating superadmin user
         $superadminUser = new User();
         $superadminUser->company_id = $globalCompany->id;
@@ -42,6 +33,25 @@ class ClientSeeder extends Seeder
         $superadminUser->type = 'superadmin';
         $superadminUser->status = 'enabled';
         $superadminUser->save();
+
+        // Admin for Demo Company
+        $admin = new User();
+        $admin->company_id = $demoCompany->id;
+        $admin->name = 'Admin';
+        $admin->email = 'admin@example.com';
+        $admin->password = Hash::make(12345678);
+        $admin->status = 'enabled';
+        $admin->save();
+
+        // Member for Demo Company
+        $admin = new User();
+        $admin->company_id = $demoCompany->id;
+        $admin->name = 'Member';
+        $admin->email = 'member@example.com';
+        $admin->password = Hash::make(12345678);
+        $admin->status = 'enabled';
+        $admin->type = 'member';
+        $admin->save();
 
         // Creating Random users for
         $companies = Company::where('is_global', 0)->inRandomOrder()->get();

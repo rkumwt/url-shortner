@@ -1,6 +1,6 @@
 const routes = [{
     path: "/",
-    component: () => import("@/views/layouts/Superadmin.vue"),
+    component: () => import("@/views/layouts/Layout.vue"),
     children: [
         {
             path: "/superadmin/dashboard",

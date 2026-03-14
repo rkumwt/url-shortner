@@ -1,6 +1,6 @@
 const routes = [{
     path: "/",
-    component: () => import("@/views/layouts/Admin.vue"),
+    component: () => import("@/views/layouts/Layout.vue"),
     children: [
         {
             path: "/admin/dashboard",
@@ -9,6 +9,15 @@ const routes = [{
             meta: {
                 requireAuth: true,
                 allowedUserType: ['admin', 'member']
+            }
+        },
+        {
+            path: "/admin/team-members",
+            name: "admin.team_members",
+            component: () => import("@/views/admin/team-members/index.vue"),
+            meta: {
+                requireAuth: true,
+                allowedUserType: ['admin']
             }
         }
     ]

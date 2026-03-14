@@ -34,6 +34,15 @@ class ShortUrlsSeeder extends Seeder
                 ]);
         }
 
+        // Also seeding data for user type member
+        $memberUser = User::where('company_id', $demoCompany->id)->where('email', 'member@example.com')->first();
+        ShortUrl::factory()
+            ->count(35)
+            ->create([
+                'company_id' => $demoCompany->id,
+                'created_by' => $memberUser,
+            ]);
+
         // Get some more other companies other than demo
         $otherCompanies = Company::where('is_global', 0)
             ->where('id', '!=', $demoCompany->id)

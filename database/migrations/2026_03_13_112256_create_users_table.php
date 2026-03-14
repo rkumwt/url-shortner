@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('invite_code', 20)->nullable()->default(null);
             $table->enum('type', ['superadmin', 'admin', 'member'])->default('admin');
             $table->enum('status', ['pending', 'enabled'])->default('pending');
+            $table->integer('total_urls')->default(0);
+            $table->integer('total_url_hits')->default(0);
             $table->timestamps();
         });
     }

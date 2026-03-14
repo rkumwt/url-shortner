@@ -29,7 +29,9 @@
                 </a-form-item>
 
                 <a-form-item>
-                    <a-button @click="onSubmit" type="primary" block>Submit</a-button>
+                    <a-button @click="onSubmit" :loading="loading" type="primary" block
+                        >Submit</a-button
+                    >
                 </a-form-item>
             </a-form>
         </a-col>
@@ -45,9 +47,11 @@ const router = useRouter();
 const email = ref("");
 const password = ref("");
 const rules = ref({});
+const loading = ref(false);
 
 const onSubmit = () => {
     rules.value = {};
+    loading.value = true;
 
     axiosBase
         .post("http://sembark-url-shortner.test/api/login", {
@@ -55,11 +59,13 @@ const onSubmit = () => {
             password: password.value,
         })
         .then((success) => {
+            loading.value = false;
             authStore.updateAuthToken(success.data.token);
             router.push({ name: "dashboard" });
         })
         .catch((error) => {
             rules.value = error.data.errors;
+            loading.value = false;
         });
 };
 </script>

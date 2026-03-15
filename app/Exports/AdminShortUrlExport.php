@@ -5,7 +5,7 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ShortUrlExport implements FromCollection, WithHeadings
+class AdminShortUrlExport implements FromCollection, WithHeadings
 {
     private $urls;
 
@@ -20,7 +20,7 @@ class ShortUrlExport implements FromCollection, WithHeadings
             'Short URL',
             'Long URL',
             'Hits',
-            'Client',
+            'User',
             'Created On'
         ];
     }
@@ -34,7 +34,7 @@ class ShortUrlExport implements FromCollection, WithHeadings
                 $url->short_url_code ?? '',
                 $url->url ?? '',
                 $url->hits ?? '',
-                $url->client ?? '',
+                $url->user ?? '',
                 $createdOn,
             ];
         });

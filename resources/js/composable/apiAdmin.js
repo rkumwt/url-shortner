@@ -6,7 +6,7 @@ const apiAdmin = () => {
     const loading = ref(false);
 
     const apiRequest = (configObject) => {
-        const { url, data, success } = configObject;
+        const { url, data } = configObject;
         loading.value = true;
         rules.value = {};
 
@@ -16,11 +16,18 @@ const apiAdmin = () => {
                 loading.value = false;
                 rules.value = {};
 
-                success(res);
+                if (configObject.success) {
+                    configObject.success(res);
+                }
             })
             .catch((error) => {
                 rules.value = error.data && error.data.errors ? error.data.errors : {};
+
                 loading.value = false;
+
+                if (configObject.error) {
+                    configObject.error(error);
+                }
             });
     }
 

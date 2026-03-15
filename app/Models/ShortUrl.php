@@ -21,6 +21,6 @@ class ShortUrl extends Model
 
     public function getShortUrlAttribute()
     {
-        return "https://sample.com";
+        return route('short.redirect', ['code' => $this->short_url_code]);
     }
 }

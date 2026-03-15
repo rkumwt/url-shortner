@@ -5,19 +5,19 @@ import adminRoute from "@/router/admin";
 
 const routes = [
     {
-        path: '/',
-        name: 'login',
-        component: () => import('@/views/Login.vue'),
+        path: '/invite/:code',
+        name: 'invite.register',
+        component: () => import('@/views/InviteRegister.vue'),
         meta: {
             requireUnauth: true,
         }
     },
     {
-        path: '/dashboard',
-        name: 'dashboard',
-        component: () => import('@/views/Dashboard.vue'),
+        path: '/',
+        name: 'login',
+        component: () => import('@/views/Login.vue'),
         meta: {
-            requireAuth: true,
+            requireUnauth: true,
         }
     },
     ...adminRoute,

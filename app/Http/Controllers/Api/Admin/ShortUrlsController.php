@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Exports\AdminShortUrlExport;
 use App\Exports\ShortUrlExport;
 use App\Http\Controllers\ApiBaseController;
 use App\Http\Requests\Api\Admin\ShortUrls\ShortUrlsDownloadRequest;
@@ -54,7 +55,7 @@ class ShortUrlsController extends ApiBaseController
         $startDate = $request->start_date ?? null;
         $endDate = $request->end_date ?? null;
 
-        $urls = ShortUrl::select('short_urls.id', 'short_urls.url', 'short_urls.short_url_code', 'short_urls.hits', 'companies.name as client', 'short_urls.created_at')
+        $urls = ShortUrl::select('short_urls.id', 'short_urls.url', 'short_urls.short_url_code', 'short_urls.hits', 'users.name as user', 'short_urls.created_at')
             ->join('users', 'users.id', '=', 'short_urls.created_by')
             ->join('companies', 'companies.id', '=', 'users.company_id')
             ->where('short_urls.company_id', $user->company_id);
@@ -69,17 +70,22 @@ class ShortUrlsController extends ApiBaseController
 
         $urls = $urls->orderBy('created_at', 'desc')->get();
 
-        return Excel::download(new ShortUrlExport($urls), 'urls.csv');
+        return Excel::download(new AdminShortUrlExport($urls), 'urls.csv');
     }
 
     public function generate(ShortUrlsGenerateRequest $request)
     {
         $user = $request->user();
 
+        // Generate unique short URL code
+        do {
+            $code = Str::random(6);
+        } while (ShortUrl::where('short_url_code', $code)->exists());
+
         $shortUrl = new ShortUrl();
         $shortUrl->company_id = $user->company_id;
         $shortUrl->url = $request->url;
-        $shortUrl->short_url_code = Str::random(6);
+        $shortUrl->short_url_code = $code;
         $shortUrl->created_by = $user->id;
         $shortUrl->save();
 

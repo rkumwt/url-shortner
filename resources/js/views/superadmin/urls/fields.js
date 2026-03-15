@@ -5,7 +5,7 @@ const fields = () => {
     const columns = [
         {
             title: "Short URL",
-            dataIndex: "short_url_code",
+            dataIndex: "short_url",
         },
         {
             title: "Long URL",

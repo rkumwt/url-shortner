@@ -20,11 +20,8 @@ class ClientSeeder extends Seeder
         DB::table('users')->truncate();
         Schema::enableForeignKeyConstraints();
 
-        // First Demo Company
-        $demoCompany = Company::where('is_global', 0)->first();
-        $globalCompany = Company::where('is_global', 1)->first();
-
         // Creating superadmin user
+        $globalCompany = Company::where('is_global', 1)->first();
         $superadminUser = new User();
         $superadminUser->company_id = $globalCompany->id;
         $superadminUser->name = 'Sembark';
@@ -34,39 +31,42 @@ class ClientSeeder extends Seeder
         $superadminUser->status = 'enabled';
         $superadminUser->save();
 
-        // Admin for Demo Company
-        $admin = new User();
-        $admin->company_id = $demoCompany->id;
-        $admin->name = 'Admin';
-        $admin->email = 'admin@example.com';
-        $admin->password = Hash::make(12345678);
-        $admin->status = 'enabled';
-        $admin->save();
+        if (env('APP_ENV') === "local") {
+            // Admin for Demo Company
+            $demoCompany = Company::where('is_global', 0)->first();
+            $admin = new User();
+            $admin->company_id = $demoCompany->id;
+            $admin->name = 'Admin';
+            $admin->email = 'admin@example.com';
+            $admin->password = Hash::make(12345678);
+            $admin->status = 'enabled';
+            $admin->save();
 
-        // Member for Demo Company
-        $admin = new User();
-        $admin->company_id = $demoCompany->id;
-        $admin->name = 'Member';
-        $admin->email = 'member@example.com';
-        $admin->password = Hash::make(12345678);
-        $admin->status = 'enabled';
-        $admin->type = 'member';
-        $admin->save();
+            // Member for Demo Company
+            $admin = new User();
+            $admin->company_id = $demoCompany->id;
+            $admin->name = 'Member';
+            $admin->email = 'member@example.com';
+            $admin->password = Hash::make(12345678);
+            $admin->status = 'enabled';
+            $admin->type = 'member';
+            $admin->save();
 
-        // Creating Random users for
-        $companies = Company::where('is_global', 0)->inRandomOrder()->get();
-        foreach ($companies as $company) {
-            User::factory()->count(1)->create([
-                'company_id' => $company->id,
-                'status' => 'enabled',
-                'type' => 'admin'
-            ]);
+            // Creating Random users for
+            $companies = Company::where('is_global', 0)->inRandomOrder()->get();
+            foreach ($companies as $company) {
+                User::factory()->count(1)->create([
+                    'company_id' => $company->id,
+                    'status' => 'enabled',
+                    'type' => 'admin'
+                ]);
 
-            User::factory()->count(fake()->numberBetween(2, 5))->create([
-                'company_id' => $company->id,
-                'status' => 'enabled',
-                'type' => fake()->randomElement(['admin', 'member'])
-            ]);
+                User::factory()->count(fake()->numberBetween(2, 5))->create([
+                    'company_id' => $company->id,
+                    'status' => 'enabled',
+                    'type' => fake()->randomElement(['admin', 'member'])
+                ]);
+            }
         }
     }
 }

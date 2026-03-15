@@ -14,7 +14,7 @@ class AuthController extends ApiBaseController
     {
         // Attempt login
         if (!Auth::attempt($request->only('email', 'password'))) {
-            return $this->error('Invalid credentials', 401);
+            return $this->error('Invalid credentials', 403);
         }
 
         // Get authenticated user

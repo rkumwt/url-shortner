@@ -91,7 +91,7 @@ const download = () => {
     const fileName = "urls.csv";
 
     axiosFile
-        .post("superadmin/urls/download", payload, {
+        .post("admin/urls/download", payload, {
             responseType: "blob",
         })
         .then((response) => {

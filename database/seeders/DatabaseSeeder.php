@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(CompanySeeder::class);
         $this->call(ClientSeeder::class);
-        $this->call(ShortUrlsSeeder::class);
+
+        if (env('APP_ENV') === "local") {
+            $this->call(ShortUrlsSeeder::class);
+        }
     }
 }

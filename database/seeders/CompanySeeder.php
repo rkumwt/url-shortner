@@ -25,13 +25,15 @@ class CompanySeeder extends Seeder
         $superadminCompany->is_global = 1;
         $superadminCompany->save();
 
-        // Creating Admin Company
-        $adminCompany = new Company();
-        $adminCompany->name = 'Demo Company';
-        $adminCompany->email = 'company@example.com';
-        $adminCompany->save();
+        if (env('APP_ENV') === "local") {
+            // Creating Admin Company
+            $adminCompany = new Company();
+            $adminCompany->name = 'Demo Company';
+            $adminCompany->email = 'company@example.com';
+            $adminCompany->save();
 
-        // Create 200 additional companies using factory
-        Company::factory()->count(200)->create();
+            // Create 200 additional companies using factory
+            Company::factory()->count(200)->create();
+        }
     }
 }

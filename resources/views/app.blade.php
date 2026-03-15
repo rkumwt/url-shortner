@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Laravel Vue</title>
+    <title>URL Shortner</title>
     @vite('resources/js/app.js')
 </head>
 

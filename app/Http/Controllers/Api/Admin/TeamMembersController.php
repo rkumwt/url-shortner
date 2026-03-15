@@ -7,8 +7,10 @@ use App\Http\Requests\Api\Admin\TeamMembers\TeamMembersIndexRequest;
 use App\Http\Requests\Api\Admin\TeamMembers\TeamMembersInviteRequest;
 use App\Mail\InviteMailClient;
 use App\Mail\InviteMailTeamMember;
+use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class TeamMembersController extends ApiBaseController
 {
@@ -38,8 +40,21 @@ class TeamMembersController extends ApiBaseController
         $email = $request->email;
         $company = $request->user()->company;
         $companyName = $company->name ?? '';
+        $inviteCode = Str::random(6);
+        $inviteUrl = route('app', '/invite/' . $inviteCode);
 
-        Mail::to($email)->send(new InviteMailTeamMember($name, $companyName, 'https://google.com'));
+        Invitation::updateOrCreate(
+            ['email' => $email],
+            [
+                'name' => $name,
+                'email' => $email,
+                'invite_code' => $inviteCode,
+                'company_id'  => $company->id,
+                'role'  => $request->role ?? 'member'
+            ]
+        );
+
+        Mail::to($email)->send(new InviteMailTeamMember($name, $companyName, $inviteUrl));
 
         return $this->success('Invitation send successfully');
     }

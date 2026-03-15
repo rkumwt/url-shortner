@@ -7,7 +7,9 @@ use App\Http\Requests\Api\Superadmin\Clients\ClientsIndexRequest;
 use App\Http\Requests\Api\Superadmin\Clients\ClientsInviteRequest;
 use App\Mail\InviteMailClient;
 use App\Models\Company;
+use App\Models\Invitation;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class ClientsController extends ApiBaseController
 {
@@ -34,10 +36,24 @@ class ClientsController extends ApiBaseController
     {
         $name = $request->name;
         $email = $request->email;
-        $globalCompany = Company::select('name')->where('is_global', 1)->first();
+        $globalCompany = Company::select('id', 'name')->where('is_global', 1)->first();
         $globalCompanyName = $globalCompany ? $globalCompany->name : '';
+        $inviteCode = Str::random(6);
 
-        Mail::to($email)->send(new InviteMailClient($name, $globalCompanyName, 'https://google.com'));
+        Invitation::updateOrCreate(
+            ['email' => $email],
+            [
+                'name' => $name,
+                'email' => $email,
+                'invite_code' => $inviteCode,
+                'company_id'  => $globalCompany->id,
+                'role'  => 'admin'
+            ]
+        );
+
+        $inviteUrl = route('app', '/invite/' . $inviteCode);
+
+        Mail::to($email)->send(new InviteMailClient($name, $globalCompanyName, $inviteUrl));
 
         return $this->success('Invitation send successfully');
     }

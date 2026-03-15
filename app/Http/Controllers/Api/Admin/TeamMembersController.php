@@ -54,7 +54,11 @@ class TeamMembersController extends ApiBaseController
             ]
         );
 
-        Mail::to($email)->send(new InviteMailTeamMember($name, $companyName, $inviteUrl));
+        try {
+            Mail::to($email)->send(new InviteMailTeamMember($name, $companyName, $inviteUrl));
+        } catch (\Exception) {
+            return $this->error('Failed to send invitation email. Please check mail configuration.', 403);
+        }
 
         return $this->success('Invitation send successfully');
     }

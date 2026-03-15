@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Exports\AdminShortUrlExport;
-use App\Exports\ShortUrlExport;
 use App\Http\Controllers\ApiBaseController;
 use App\Http\Requests\Api\Admin\ShortUrls\ShortUrlsDownloadRequest;
 use App\Http\Requests\Api\Admin\ShortUrls\ShortUrlsGenerateRequest;

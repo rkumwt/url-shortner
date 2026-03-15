@@ -53,7 +53,11 @@ class ClientsController extends ApiBaseController
 
         $inviteUrl = route('app', '/invite/' . $inviteCode);
 
-        Mail::to($email)->send(new InviteMailClient($name, $globalCompanyName, $inviteUrl));
+        try {
+            Mail::to($email)->send(new InviteMailClient($name, $globalCompanyName, $inviteUrl));
+        } catch (\Exception) {
+            return $this->error('Failed to send invitation email. Please check mail configuration.', 403);
+        }
 
         return $this->success('Invitation send successfully');
     }

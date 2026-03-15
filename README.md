@@ -40,6 +40,15 @@ php artisan db:seed
 > - **Email:** superadmin@example.com
 > - **Password:** 12345678
 
+6. Configure mail settings in `.env` for sending invitation emails (you can use https://mailtrap.io for testing)
+```
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your_mailtrap_username
+MAIL_PASSWORD=your_mailtrap_password
+```
+
 ## Running the Project
 
 ```bash
